@@ -1,0 +1,818 @@
+/* ... (पिछली CSS के सभी स्टाइल यहाँ कॉपी करें) ... */
+
+/* Overall page background matching the image */
+.page-background {
+  background-color: rgb(255, 174, 0); /* Purple background from image */
+  min-height: 100vh;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.form-card {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 25px;
+  border-bottom: 1px solid #E9ECEF;
+}
+
+.logo-container .logo-text {
+  font-weight: bold;
+  font-size: 1.5em;
+  color: rgb(255, 174, 0);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+  color: #495057;
+}
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+.dropdown-arrow { margin-left: 8px; font-size: 0.7em; }
+
+.form-card-body { display: flex; flex-grow: 1; }
+
+.sidebar {
+  width: 250px;
+  background-color: #F8F9FA;
+  padding: 30px 25px;
+  border-right: 1px solid #E9ECEF;
+  display: flex;
+  flex-direction: column;
+
+}
+.sidebar-icon-container { margin-bottom: 20px; color: rgb(255, 174, 0); }
+.sidebar-title { font-size: 1.25em; color: #343A40; margin-top: 0; margin-bottom: 8px; }
+.sidebar-subtitle { font-size: 0.85em; color: #6C757D; margin-bottom: 25px; }
+.sidebar-progress-bar {
+  width: 80%; /* Increased width for better visibility */
+  height: 8px; /* Slightly thicker */
+  background-color: #DEE2E6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.sidebar-progress {
+  height: 100%;
+  background-color: rgb(255, 174, 0);
+  border-radius: 4px;
+  transition: width 0.3s ease-in-out; /* Smooth transition for progress */
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 30px 35px;
+  overflow-y: auto;
+  max-height: calc(100vh - 160px); /* (Header + Padding + some buffer) */
+}
+.main-title { font-size: 1.75em; color: #343A40; margin-top: 0; margin-bottom: 25px; }
+
+.appointment-form .form-section-title { /* For step titles like "Personal Details" */
+  font-size: 1.2em; /* Made slightly larger */
+  color: #343A40; /* Darker for more prominence */
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E9ECEF;
+}
+
+.form-step-content-area {
+  min-height: 300px; /* Ensure some min height for content switching */
+}
+
+.form-row { display: flex; gap: 20px; margin-bottom: 15px; }
+.form-row .form-group { flex: 1; margin-bottom: 0; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: 600; font-size: 0.85em; margin-bottom: 8px; color: #495057; }
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #CED4DA;
+  border-radius: 4px;
+  font-size: 0.95em;
+  box-sizing: border-box;
+  background-color: #FFFFFF;
+  color: #495057;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #80BDFF;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+.radio-group { display: flex; gap: 15px; flex-wrap: wrap; }
+.radio-group label { font-weight: normal; font-size: 0.9em; display: inline-flex; align-items: center; cursor: pointer; }
+.radio-group input[type="radio"] { margin-right: 6px; accent-color: rgb(255, 174, 0); }
+.conditional-input { margin-top: 10px; }
+
+.form-actions { margin-top: 30px; display: flex; justify-content: flex-end; gap: 12px; }
+.form-actions button { padding: 10px 20px; border-radius: 4px; font-size: 0.9em; font-weight: 600; cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease; }
+.button-cancel { background-color: #F8F9FA; color: #6C757D; border: 1px solid #CED4DA; }
+.button-cancel:hover { background-color: #E2E6EA; border-color: #DAE0E5; }
+.button-next { background-color: rgb(255, 174, 0); color: white; border: 1px solid rgb(255, 174, 0); }
+.button-next:hover { background-color: rgb(255, 174, 0); border-color: rgb(255, 174, 0); }
+.form-actions button:first-child:not(:only-child) { /* If Back button exists */
+    margin-right: auto; /* Pushes Back button to the left */
+}
+
+
+/* --- Styles for Calendar and Time Slots --- */
+.calendar-wrapper {
+  padding: 15px;
+  border: 1px solid #E9ECEF;
+  border-radius: 6px;
+  margin-bottom: 25px;
+  background-color: #FDFDFD; /* Slightly off-white for calendar background */
+}
+.calendar-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.current-month-year { font-size: 1.1em; font-weight: 600; color: #343A40; }
+.nav-arrow {
+  background: none; border: none; font-size: 1.4em; color: rgb(255, 174, 0); cursor: pointer; padding: 0 8px;
+}
+.nav-arrow:hover { color: #0056b3; }
+
+.calendar-grid-headers, .calendar-grid-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+.grid-header-cell { font-weight: 600; font-size: 0.8em; padding-bottom: 8px; color: #6C757D; }
+.calendar-day {
+  padding: 10px 5px;
+  border: 1px solid transparent;
+  background-color: #FFFFFF;
+  color: #495057;
+  cursor: pointer;
+  font-size: 0.9em;
+  position: relative;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  margin: 1px;
+  border-radius: 4px;
+}
+.calendar-day.empty { background-color: transparent; cursor: default; }
+.calendar-day.unavailable, .calendar-day.past {
+  color: #ADB5BD;
+  background-color: #F1F3F5; /* Lighter grey for unavailable/past */
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+.calendar-day.available:hover { background-color: #E9ECEF; border-color: #CED4DA; }
+.calendar-day.selected {
+  background-color: rgb(255, 174, 0) !important;
+  color: white !important;
+  border-color: rgb(255, 174, 0) !important;
+  font-weight: bold;
+}
+.availability-dot {
+  height: 5px; width: 5px; background-color: #28A745; /* Green dot for availability */
+  border-radius: 50%; display: block; margin: 3px auto 0;
+}
+.calendar-day.selected .availability-dot { background-color: white; }
+
+.time-selector-wrapper { margin-top: 20px; }
+.time-selector-title { font-size: 1em; font-weight: 600; margin-bottom: 10px; color: #343A40; }
+.time-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+}
+.time-slot-btn {
+  padding: 8px 10px;
+  border: 1px solid #CED4DA;
+  background-color: #FFFFFF;
+  color: rgb(255, 174, 0);
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.9em;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.time-slot-btn:hover { background-color: #E9ECEF; border-color: rgb(255, 174, 0); }
+.time-slot-btn.selected {
+  background-color: rgb(255, 174, 0) !important;
+  color: white !important;
+  border-color: rgb(255, 174, 0) !important;
+  font-weight: bold;
+}
+
+/* Review Section Styles */
+.review-section {
+  margin-bottom: 12px;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+.review-section strong {
+  color: #343A40;
+  min-width: 150px; /* Adjust for alignment if needed */
+  display: inline-block;
+}
+
+/* Scrollbar and Responsive (from previous CSS) */
+.main-content::-webkit-scrollbar { width: 8px; }
+.main-content::-webkit-scrollbar-track { background: #F1F1F1; border-radius: 10px; }
+.main-content::-webkit-scrollbar-thumb { background: #C0C0C0; border-radius: 10px; }
+.main-content::-webkit-scrollbar-thumb:hover { background: #A0A0A0; }
+
+@media (max-width: 768px) {
+  .page-background { padding: 15px; }
+  .form-card-body { flex-direction: column; }
+  .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #E9ECEF; padding: 20px; max-height: none; }
+  .main-content { padding: 20px; max-height: none; }
+  .form-row { flex-direction: column; gap: 0; }
+  .form-row .form-group { margin-bottom: 15px; }
+   .form-actions { flex-direction: column; }
+  .form-actions button { width: 100%; }
+  .form-actions button:first-child:not(:only-child) { margin-right: 0; margin-bottom: 10px; } /* Adjust for stacked buttons */
+}
+
+
+/* Black Theme with Orange Accents */
+.page-background.dark-theme {
+  background-color: #000000; /* Pure black */
+}
+
+.page-background.light-theme {
+  background-color: #F3F4F6;
+}
+
+.dark-theme .form-card {
+  background-color: #121212; /* Slightly lighter than pure black */
+  color: #e0e0e0;
+  border: 1px solid #333333;
+}
+
+.dark-theme .form-card-header {
+  border-bottom-color: #333333;
+  background-color: #121212;
+}
+
+.dark-theme .logo-text,
+.dark-theme .main-title,
+.dark-theme .form-section-title,
+.dark-theme .sidebar-title {
+  color: rgb(255, 174, 0); /* Orange headings */
+}
+
+.dark-theme .review-section strong {
+  color: rgb(255, 174, 0); /* Orange for strong text */
+}
+
+.dark-theme .sidebar {
+  background-color: #121212;
+  border-right-color: #333333;
+}
+
+.dark-theme .form-group label,
+.dark-theme .sidebar-subtitle {
+  color: #b0b0b0;
+}
+
+.dark-theme .review-section {
+  color: #d0d0d0;
+}
+
+.dark-theme input[type="text"],
+.dark-theme input[type="email"],
+.dark-theme input[type="tel"],
+.dark-theme input[type="number"],
+.dark-theme select,
+.dark-theme textarea {
+  background-color: #1e1e1e;
+  border-color: #333333;
+  color: #e0e0e0;
+}
+
+.dark-theme input:focus,
+.dark-theme select:focus,
+.dark-theme textarea:focus {
+  border-color: rgb(255, 174, 0);
+  box-shadow: 0 0 0 0.2rem rgba(255, 174, 0, 0.25);
+}
+
+.dark-theme .calendar-wrapper {
+  background-color: #1e1e1e;
+  border-color: #333333;
+}
+
+.dark-theme .calendar-day {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.dark-theme .calendar-day.available:hover {
+  background-color: #2a2a2a;
+}
+
+.dark-theme .calendar-day.selected {
+  background-color: rgb(255, 174, 0) !important;
+  color: #121212 !important;
+  border-color: rgb(255, 174, 0) !important;
+}
+
+.dark-theme .calendar-day.unavailable,
+.dark-theme .calendar-day.past {
+  background-color: #2a2a2a;
+  color: #707070;
+}
+
+.dark-theme .time-slot-btn {
+  background-color: #1e1e1e;
+  border-color: #333333;
+  color: #e0e0e0;
+}
+
+.dark-theme .time-slot-btn.selected {
+  background-color: rgb(255, 174, 0) !important;
+  color: #121212 !important;
+  border-color: rgb(255, 174, 0) !important;
+}
+
+.dark-theme .button-next {
+  background-color: rgb(255, 174, 0);
+  color: #121212;
+  border-color: rgb(255, 174, 0);
+}
+
+.dark-theme .button-next:hover {
+  background-color: rgb(255, 190, 50);
+  border-color: rgb(255, 190, 50);
+}
+
+.dark-theme .button-cancel {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #333333;
+}
+
+.dark-theme .button-cancel:hover {
+  background-color: #333333;
+}
+
+.dark-theme .radio-group input[type="radio"] {
+  accent-color: rgb(255, 174, 0);
+}
+
+.dark-theme .sidebar-progress {
+  background-color: rgb(255, 174, 0);
+}
+
+.dark-theme .availability-dot {
+  background-color: rgb(255, 174, 0);
+}
+
+/* ... (Existing CSS) ... */
+
+/* Sidebar improvements */
+.sidebar {
+  width: 300px; /* Aap ise 250px ya apni pasand se adjust kar sakte hain */
+  /* Image ke अनुसार white background */
+  border-right: 1px solid #E9ECEF;
+  display: flex;
+  flex-direction: column; /* Scrollable content aur cookie link ko stack karne ke liye */
+  /* Agar form-card-body ki height main-content ke hisab se stretch hoti hai, toh sidebar bhi stretch hoga */
+}
+
+.sidebar-scrollable-content {
+  flex-grow: 1; /* Bachi hui jagah lega */
+  overflow-y: auto; /* Vertical scroll agar content zyada ho */
+  padding: 25px;
+  color: #343A40; /* Default text color */
+}
+
+/* Sidebar scrollbar styling (optional) */
+.sidebar-scrollable-content::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-scrollable-content::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+.sidebar-scrollable-content::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 3px;
+}
+.sidebar-scrollable-content::-webkit-scrollbar-thumb:hover {
+  background: #aaaaaa;
+}
+
+.cookie-settings-container {
+  padding: 15px 25px;
+  border-top: 1px solid #E9ECEF; /* Separator */
+  font-size: 0.85em;
+  background-color: #FFFFFF; /* Ensures background consistency */
+  flex-shrink: 0; /* Prevents shrinking */
+  text-align: left; /* Ensure text is aligned left */
+}
+
+.cookie-settings-link {
+  color: #6C757D; /* Image jaisa halka color */
+  text-decoration: none;
+}
+.cookie-settings-link:hover {
+  text-decoration: underline;
+}
+
+/* Content styling inside sidebar */
+.sidebar-coach-name {
+  font-size: 0.9em;
+  color: #6C757D;
+  margin-bottom: 4px;
+}
+
+.sidebar-main-assessment-title {
+  font-size: 1.5em; /* Image ke bade title jaisa */
+  font-weight: bold;
+  color: #1f2d3d; /* Thoda gehra color */
+  margin-bottom: 15px;
+  line-height: 1.3;
+}
+
+.sidebar-info-item {
+  display: flex;
+  align-items: flex-start; /* Align items to the start for multi-line text */
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  color: #495057;
+}
+
+.sidebar-info-item svg {
+  margin-right: 8px;
+  flex-shrink: 0; /* Icon ko shrink hone se bachaye */
+  width: 18px; /* Explicit width */
+  height: 18px; /* Explicit height */
+  margin-top: 2px; /* Align with first line of text */
+}
+
+.sidebar-section-heading {
+  font-size: 0.9em; /* Consistent with image's smaller headings */
+  font-weight: bold;
+  color: #1f2d3d;
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.sidebar-list {
+  list-style-position: outside;
+  padding-left: 20px;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 0.85em; /* Thoda chhota text list ke liye */
+  color: #495057;
+  line-height: 1.5;
+}
+
+.sidebar-list-item {
+  margin-bottom: 6px;
+}
+
+.sidebar-small-text {
+  font-size: 0.85em; /* Consistent chhota text */
+  color: #495057;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+/* Dark Theme adjustments for new sidebar content */
+.dark-theme .sidebar {
+  background-color: #121212; /* Dark card background */
+  border-right-color: #333333;
+}
+
+.dark-theme .sidebar-scrollable-content {
+  color: #e0e0e0; /* Light text for dark background */
+}
+.dark-theme .sidebar-scrollable-content::-webkit-scrollbar-track {
+  background: #2a2a2a;
+}
+.dark-theme .sidebar-scrollable-content::-webkit-scrollbar-thumb {
+  background: #555555;
+}
+.dark-theme .sidebar-scrollable-content::-webkit-scrollbar-thumb:hover {
+  background: #777777;
+}
+
+
+.dark-theme .cookie-settings-container {
+  background-color: #121212;
+  border-top-color: #333333;
+}
+
+.dark-theme .cookie-settings-link {
+  color: #a0a0a0; /* Lighter grey for dark theme */
+}
+
+.dark-theme .sidebar-coach-name {
+  color: #a0a0a0;
+}
+
+.dark-theme .sidebar-main-assessment-title,
+.dark-theme .sidebar-section-heading {
+  color: #f0f0f0; /* Brighter white/off-white for headings */
+}
+
+.dark-theme .sidebar-info-item,
+.dark-theme .sidebar-list,
+.dark-theme .sidebar-small-text {
+  color: #b0b0b0; /* Lighter grey for general text */
+}
+
+/* Ensure icons in dark theme also adapt if they use currentColor */
+.dark-theme .sidebar-info-item svg {
+  color: #b0b0b0; /* Match text color or use accent */
+}
+
+/* Ensure .form-card-body allows sidebar and main-content to define its height */
+.form-card-body {
+  display: flex;
+  flex-grow: 1;
+  /* align-items: stretch; /* Default, good */
+}
+/* --- Styles for Form Subsection Titles --- */
+.form-subsection-title {
+  font-size: 1.1em; /* Slightly smaller than form-section-title */
+  color: #495057;   /* A bit softer than the main section title */
+  margin-top: 25px; /* More top margin for separation */
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #E9ECEF; /* Consistent with other borders */
+  font-weight: 600; /* Make it semi-bold */
+}
+
+.dark-theme .form-subsection-title {
+  color: #c0c0c0; /* Lighter grey for dark theme */
+  border-bottom-color: #333333;
+}
+
+/* --- Styles for Congratulations Screen --- */
+.congratulations-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px; /* Responsive padding */
+  background-color: #FFFFFF;
+  border-radius: 12px; /* Slightly more rounded */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 650px; 
+  margin: 40px auto; /* Centered on the page-background */
+  animation: fadeInScaleUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Playful bounce */
+  color: #343A40; /* Darker text for better readability */
+}
+
+.congratulations-container h2 {
+  font-size: 2.2em; /* Adjusted size */
+  color: rgb(255, 174, 0); /* Theme accent color */
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.congratulations-container p {
+  font-size: 1.05em; /* Slightly larger paragraph text */
+  color: #495057;
+  margin-bottom: 12px;
+  line-height: 1.7;
+  max-width: 90%; /* Prevent text from being too wide */
+}
+
+.congratulations-container p strong {
+    color: #343A40;
+}
+
+.congratulations-icon {
+  color: rgb(255, 174, 0); /* Accent color for the icon */
+  margin-bottom: 20px;
+  animation: iconPop 0.5s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards; /* Delayed pop with bounce */
+}
+
+@keyframes fadeInScaleUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes iconPop {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Dark theme adjustments for congratulations */
+.dark-theme .congratulations-container {
+  background-color: #1A1A1A; /* Darker card background */
+  color: #e0e0e0;
+  border: 1px solid #383838; /* Slightly more prominent border */
+  box-shadow: 0 12px 30px rgba(255, 174, 0, 0.08); /* Subtle orange glow */
+}
+.dark-theme .congratulations-container h2 {
+  color: rgb(255, 174, 0);
+}
+.dark-theme .congratulations-container p {
+  color: #b0b0b0;
+}
+.dark-theme .congratulations-container p strong {
+    color: #e0e0e0;
+}
+.dark-theme .congratulations-icon {
+  color: rgb(255, 174, 0); /* Orange accent for dark theme icon too */
+}
+
+/* Ensure the page background accommodates the congratulations box if it's taller */
+.page-background {
+    min-height: 100vh;
+    padding: 20px; /* Ensure some padding even on smaller screens */
+    display: flex; /* Helps center the congratulations box if it's the only child */
+    align-items: center; /* Vertically center if content is not too tall */
+    justify-content: center;
+}
+
+/* --- Styles for NEW Enhanced Congratulations Screen --- */
+.page-background { /* Ensure it's set up for centering */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden; /* Hide confetti that goes off-screen */
+}
+
+.congratulations-container-wrapper {
+  position: relative; /* For confetti positioning */
+  perspective: 1000px; /* For 3D-ish effects if desired later */
+}
+
+.congratulations-container {
+  position: relative; /* For z-index stacking of confetti */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 35px 25px;
+  background-color: #FFFFFF;
+  border-radius: 15px; /* Softer, more modern radius */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0,0,0,0.07); /* Deeper shadow */
+  width: 100%;
+  max-width: 600px; /* Slightly narrower for a sleeker look */
+  margin: 20px;
+  color: #343A40;
+  z-index: 10; /* Above confetti background if any */
+  /* Entrance Animation */
+  opacity: 0;
+  transform: translateY(50px) scale(0.8);
+  animation: energeticEntrance 0.8s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.congratulations-title { /* Renamed from h2 for clarity */
+  font-size: 2.3em;
+  color: rgb(255, 174, 0); /* Your theme accent */
+  margin-bottom: 10px;
+  font-weight: 700;
+  animation: textGlow 1.5s ease-in-out infinite alternate; /* Subtle glow */
+}
+
+.congratulations-container p {
+  font-size: 1em;
+  color: #495057;
+  margin-bottom: 10px;
+  line-height: 1.6;
+  max-width: 95%;
+}
+
+.congratulations-container p strong {
+  color: #2c3e50; /* Slightly darker strong text */
+}
+
+.congratulations-icon {
+  color: rgb(255, 174, 0);
+  margin-bottom: 15px;
+  transform: scale(0);
+  opacity: 0;
+  animation: iconCelebration 0.7s 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Keyframe Animations */
+@keyframes energeticEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes iconCelebration {
+  0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes textGlow {
+  from {
+    text-shadow: 0 0 5px rgba(255, 174, 0, 0.4), 0 0 10px rgba(255, 174, 0, 0.3);
+  }
+  to {
+    text-shadow: 0 0 10px rgba(255, 174, 0, 0.6), 0 0 20px rgba(255, 174, 0, 0.4);
+  }
+}
+
+/* Confetti Styles */
+.confetti-burst-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible; /* Allow confetti to fly out */
+  pointer-events: none; /* Don't interfere with clicks */
+  z-index: 1; /* Behind the main content but visible */
+}
+
+.confetti-piece {
+  position: absolute;
+  opacity: 0; /* Start hidden */
+  animation-name: confettiFall;
+  animation-timing-function: linear; /* Consistent fall speed */
+  animation-fill-mode: forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    opacity: 1;
+    transform: translateY(0vh) rotate(0deg); /* Start from their random 'top' position */
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(720deg); /* Fall down and rotate */
+  }
+}
+
+/* Dark Theme Adjustments for Enhanced Congratulations */
+.dark-theme .congratulations-container {
+  background-color: #1E1E1E; /* Darker, richer background */
+  color: #e0e0e0;
+  border: 1px solid #333;
+}
+.dark-theme .congratulations-title {
+  color: rgb(255, 174, 0);
+  animation-name: textGlowDark; /* Different glow for dark theme if needed, or adjust existing */
+}
+.dark-theme .congratulations-container p {
+  color: #b0b0b0;
+}
+.dark-theme .congratulations-container p strong {
+  color: #dadada;
+}
+.dark-theme .congratulations-icon {
+  color: rgb(255, 174, 0);
+}
+
+@keyframes textGlowDark { /* Optional: slightly different glow for dark */
+  from {
+    text-shadow: 0 0 8px rgba(255, 174, 0, 0.5), 0 0 15px rgba(255, 174, 0, 0.4);
+  }
+  to {
+    text-shadow: 0 0 15px rgba(255, 174, 0, 0.7), 0 0 30px rgba(255, 174, 0, 0.5);
+  }
+}

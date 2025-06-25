@@ -1,0 +1,522 @@
+.page-wrapper-luna {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.top-strip-luna {
+  text-align: center;
+  padding: 15px 0;
+  font-size: 1rem;
+  margin-bottom: 20px;
+
+    background-color: black;
+    
+margin: none;
+}
+.top_c{
+    margin: 0 0 5px;
+      color: #FFAE00;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 800;
+}
+.hero-section-luna {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero-section-luna h1 {
+  font-size: 2.2rem; /* Adjust as needed */
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.hero-section-luna .highlight-green-luna {
+  color: gray; /* Bright lime green for typed text */
+}
+.hero-section-luna .highlight-green-luna .typed-cursor { /* Style typed.js cursor */
+  color: #FFAE00;
+  opacity: 1;
+  animation: typedjsBlink 0.7s infinite;
+}
+@keyframes typedjsBlink {
+  50% { opacity: 0.0; }
+}
+
+.hero-section-luna .subtitle-luna {
+  font-size: 1.125rem;
+  max-width: 800px;
+  margin: 20px auto 0;
+  color: black; /* Slightly off-white for subtitle */
+}
+
+.info-banner-luna {
+
+  color: linear-gradient(90deg, #F54200 0%, #FFAE00 100%); /* Dark text on lime green */
+  text-align: center;
+  padding: 18px 20px;
+  margin: 40px auto;
+  border-radius: 8px;
+  font-weight: 700;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(124, 179, 43, 0.5) inset, 0 -1px 2px rgba(124, 179, 43, 0.5) inset;
+  max-width: 900px; /* Constrain banner width */
+}
+
+.success-banner-luna h2 {
+  font-size: 1.75rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.visual-focus-section-luna {
+  position: relative;
+  width: 100%;
+  max-width: 900px; /* Control max width of this visual block */
+  margin: 40px auto;
+  min-height: 350px; /* Adjust based on your background image's aspect ratio */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px; /* Optional: for the whole section */
+  overflow: hidden; /* Important if .single-image-background-luna uses absolute positioning */
+}
+
+.single-image-background-luna {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1; /* Behind the video */
+}
+
+.video-area-luna { /* Container for the "chota sa video" */
+  position: relative; /* Relative to its normal flow, centered by flex on parent */
+  z-index: 10;
+  width: 60%; /* Smaller than the background area */
+  max-width: 480px; /* Max width for the video element */
+}
+
+.video-thumbnail-container-luna {
+  position: relative;
+  background-color: #222; /* Fallback */
+  border-radius: 10px;
+  overflow: hidden; /* Keeps image corners rounded */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45); /* Shadow for depth */
+}
+
+.video-thumbnail-img-luna {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.play-button-overlay-luna {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  background: linear-gradient(90deg, #F54200 0%, #FFAE00 100%);
+  border-radius: 50%;
+  padding: 8px; /* Adjust for smaller video */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-button-overlay-luna .play-svg {
+  width: 40px; /* Smaller play icon */
+  height: 40px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.2s ease;
+}
+
+.play-button-overlay-luna:hover .play-svg {
+  color: #FFFFFF;
+}
+
+.video-text-overlay-luna {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #FFFFFF;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cta-section-luna {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.cta-banner-luna { /* This is the parent of the Link, styled like info-banner */
+  display: inline-block; /* So it sizes to its content (the link) */
+  margin-bottom: 25px; /* Space before social links */
+  /* Inherits background, color, box-shadow etc. from .info-banner-luna */
+  /* We need to ensure it's not too wide if text is short */
+  max-width: 100%; /* Don't exceed parent */
+  padding: 0; /* Reset padding as link will have it */
+}
+.cta-banner-luna:hover { /* Hover effect on the banner containing the link */
+   color: #FFAE00;/* Darker lime */
+}
+.cta-banner-luna:hover .cta-button-link-luna { /* Change link text color on banner hover */
+    color: #000000;
+}
+
+
+.cta-button-link-luna { /* Styling for the Link component */
+  display: block;
+  padding: 15px 30px;
+  color: #1A1A1A; /* Initial dark text */
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 8px; /* Match banner's border-radius */
+  transition: color 0.2s ease; /* Only color transition for link text */
+}
+.cta-button-link-luna i {
+  margin-left: 8px;
+}
+
+.social-links-luna {
+  margin-top: 20px; /* If cta-banner-luna doesn't have enough bottom margin */
+  display: flex;
+  justify-content: center;
+}
+
+.social-links-luna .social-info {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 15px;
+}
+
+.social-links-luna .social-info li a { /* Example styling for social icons */
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  transition: color 0.2s ease;
+}
+
+.social-links-luna .social-info li a:hover {
+  color: #FFAE00; /* Highlight on hover */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .hero-section-luna h1 {
+    font-size: 1.9rem;
+  }
+  .visual-focus-section-luna {
+    max-width: 700px;
+    min-height: 300px;
+  }
+  .video-area-luna {
+    width: 65%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section-luna h1 {
+    font-size: 1.6rem;
+  }
+  .hero-section-luna .subtitle-luna {
+    font-size: 1rem;
+  }
+  .success-banner-luna h2, .cta-button-link-luna {
+    font-size: 1.15rem;
+  }
+  .cta-button-link-luna {
+    padding: 12px 25px;
+  }
+  .visual-focus-section-luna {
+    min-height: 250px;
+  }
+  .video-area-luna {
+    width: 70%;
+    max-width: 320px;
+  }
+  .play-button-overlay-luna .play-svg {
+    width: 35px;
+    height: 35px;
+  }
+  .video-text-overlay-luna {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section-luna h1 {
+    font-size: 1.4rem;
+  }
+  .success-banner-luna h2 {
+    font-size: 1.1rem;
+  }
+  .cta-button-link-luna {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+  .info-banner-luna {
+    padding: 15px;
+    margin: 30px auto;
+  }
+  .visual-focus-section-luna {
+    min-height: 200px;
+  }
+  .video-area-luna {
+    width: 75%; /* Video can be a bit larger percentage-wise on small screens */
+    max-width: 280px;
+  }
+}
+
+
+
+
+/* Aapki ./style.css file mein yeh styles add karein */
+
+/* ... (aapke existing .video-thumbnail-container-luna, .video-text-overlay-luna styles pehle jaise rahenge) ... */
+
+.video-thumbnail-container-luna {
+    position: relative; /* Yeh zaroori hai play button ko absolute position dene ke liye */
+    display: inline-block; /* Ya block, jaisa layout ho */
+    cursor: pointer;
+    width: 480px; /* Example width, aap adjust kar sakte hain */
+    height: 270px; /* Example height, thumbnail ke aspect ratio ke hisaab se */
+    max-width: 100%;
+    background-size: cover;     /* Image ko cover karne ke liye */
+    background-position: center; /* Image ko center mein rakhne ke liye */
+    background-repeat: no-repeat;
+    border-radius: 8px; /* Optional */
+    overflow: hidden; /* Agar image tag use kar rahe hain toh zaroori */
+}
+
+/* Agar aap <img> tag use karna chahte hain video-thumbnail-img-luna ke liye: */
+/*
+.video-thumbnail-img-luna {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Image ko container mein fit karega bina aspect ratio bigade */
+/* }
+*/
+
+
+/* Naya Play Button Style (AboutV1 jaisa) */
+.video-play-button-luna-style {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;  /* Button ka size */
+  height: 70px; /* Button ka size */
+  background-color: rgba(42, 63, 42, 0.6); /* Aapke theme ka dark green, thoda transparent */
+  border-radius: 50%; /* Gol button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Baaki elements ke upar */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.video-play-button-luna-style:hover {
+  background-color: rgba(42, 63, 42, 0.85); /* Hover par thoda dark */
+  transform: translate(-50%, -50%) scale(1.1); /* Thoda sa bada ho jayega hover par */
+}
+
+.video-play-button-luna-style i.fas.fa-play {
+  color: white;
+  font-size: 26px; /* Icon ka size */
+  margin-left: 4px; /* Play icon thoda right mein hota hai, visually center karne ke liye */
+}
+
+.effect-luna-style {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+   background: linear-gradient(90deg, #F54200 0%, #FFAE00 100%);
+  border: 3px solid rgba(255, 255, 255, 0.7); /* Ripple ka color aur thickness */
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  animation: rippleEffectLuna 1.5s infinite ease-out;
+  z-index: -1; /* Icon ke peeche */
+}
+
+@keyframes rippleEffectLuna {
+  0% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.4); /* Ripple kitna bada hoga */
+    opacity: 0;
+  }
+}
+
+/* Video text overlay (agar pehle se hai toh review kar lein) */
+.video-text-overlay-luna {
+    position: absolute;
+    bottom: 10px;
+    left: 10px; /* Ya right: 10px; jaisa design ho */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 5; /* Play button se neeche */
+}
+
+
+/* ... (Aapke LeadCaptureForm ke styles pehle jaise rahenge) ... */
+.popup-form-overlay-luna {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.popup-form-content-luna {
+  background-color: #ffffff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  text-align: left;
+  animation: fadeInScaleUp 0.3s ease-out;
+}
+
+@keyframes fadeInScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.popup-form-content-luna h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 22px;
+  color: #2A3F2A;
+  font-weight: 600;
+}
+
+.popup-form-content-luna p {
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.close-button-luna {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 30px;
+  font-weight: 300;
+  color: #777;
+  cursor: pointer;
+  line-height: 1;
+  padding: 5px;
+}
+
+.form-group-luna {
+  margin-bottom: 18px;
+}
+
+.form-group-luna label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #444;
+}
+
+.form-group-luna input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 15px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group-luna input:focus {
+  border-color: #2A3F2A;
+  box-shadow: 0 0 0 2px rgba(42, 63, 42, 0.2);
+  outline: none;
+}
+
+.submit-button-luna {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.submit-button-luna:hover {
+  background-color: transparent;
+}
+
+.submit-button-luna:active {
+  transform: translateY(1px);
+}
+
+.cta-button-link-luna {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 25px;
+    background-color: #2A3F2A;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button-link-luna:hover {
+    background-color: #1E2D1E;
+}
+
+.cta-button-link-luna i {
+    margin-left: 8px;
+}

@@ -1,0 +1,188 @@
+/* Add to your global CSS file (e.g., index.css or App.css) */
+:root {
+    --sticky-bar-height-desktop: 75px; /* Match with JS variable if using CSS vars */
+    --sticky-bar-height-mobile: 140px; /* Match with JS variable for mobile */
+}
+
+.main-content-pusher {
+    padding-bottom: var(--sticky-bar-height-desktop);
+}
+
+@media (max-width: 768px) {
+    .main-content-pusher {
+        padding-bottom: var(--sticky-bar-height-mobile);
+    }
+}
+
+.sticky-enroll-bar-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: beige; /* White background as in image */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow on top */
+    z-index: 1000; /* Ensure it's above other content */
+    padding: 10px 0; /* Padding top and bottom for the container */
+}
+
+.sticky-enroll-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px; /* Or your site's max-width */
+    margin: 0 auto;
+    padding: 0 20px; /* Horizontal padding */
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.price-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.current-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: orange; /* Green color for current price */
+}
+
+.original-price {
+    font-size: 18px;
+    color: #dc3545; /* Red color for original price */
+    text-decoration: line-through;
+}
+
+.deadline {
+    font-size: 14px;
+    color: #555555;
+}
+
+.action-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center bonus text below button */
+    gap: 5px; /* Gap between button area and bonus text */
+}
+
+.enroll-button-wrapper {
+    position: relative; /* For positioning the seats badge */
+    display: flex; /* To align button if other items were beside it, not strictly needed here */
+    flex-direction: column; /* Stack badge on top of button (conceptually) */
+    align-items: center; /* Center button if wrapper is wider */
+}
+
+.seats-left-badge {
+    background-color: #212529; /* Dark background for badge */
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 12px; /* Pill shape */
+    position: absolute;
+    top: -15px; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%); /* Center the badge */
+    white-space: nowrap;
+    z-index: 1; /* Above the button slightly if needed */
+}
+
+.enroll-now-button {
+    background-color: orange; /* Darker red on hover */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 5px; /* Space for badge if it were pushing content */
+}
+
+.enroll-now-button:hover {
+    background-color: none !important; /* Darker red on hover */
+    color: black;
+    border: 1px solid orange !important;
+}
+
+.bonus-text {
+    font-size: 12px;
+    color: #333333;
+    font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sticky-enroll-bar {
+        flex-direction: column; /* Stack info and action sections */
+        gap: 15px; /* Space between stacked sections */
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .info-section {
+        align-items: center; /* Center info section content */
+        text-align: center;
+    }
+
+    .action-section {
+        width: 100%; /* Make action section take full width */
+        align-items: center; /* Center its content */
+    }
+    
+    .enroll-button-wrapper {
+        width: auto; /* Allow button to size naturally or set a specific width */
+    }
+
+    .enroll-now-button {
+        width: 100%; /* Make button full width in its container */
+        max-width: 300px; /* Optional: prevent button from becoming too wide */
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+
+    .seats-left-badge {
+        /* Adjust badge position if needed for stacked layout,
+           it might be fine as is, or slightly adjusted.
+           Example: could be relative to the action-section top.
+        */
+        font-size: 9px;
+        padding: 3px 6px;
+        top: -12px; /* Slightly adjust for smaller text */
+    }
+
+    .current-price {
+        font-size: 20px;
+    }
+    .original-price {
+        font-size: 16px;
+    }
+    .deadline {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .current-price {
+        font-size: 18px;
+    }
+    .original-price {
+        font-size: 14px;
+    }
+    .enroll-now-button {
+        font-size: 15px;
+        padding: 10px 15px;
+    }
+     .sticky-enroll-bar-container {
+        padding: 5px 0;
+    }
+}

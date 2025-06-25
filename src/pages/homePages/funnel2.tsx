@@ -1,0 +1,757 @@
+import React, { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import "./funnel1.css";
+import Iphoness from "../../assets/img/iphone/iphoness.gif";
+import Iphone from "../../assets/img/iphone/iphone.png";
+import arrow from "../../assets/img/arrow/icons8-curly-arrow.gif";
+import darkarrow from "../../assets/img/arrow/darkarrow.gif";
+
+// Local asset imports
+import lightmode from "..//..//assets/img/lightdarkicon/icons8-light-mode-78.png";
+import darkmode from "..//..//assets/img/lightdarkicon/icons8-dark-mode-50.png";
+import { FaGlobe, FaCheck, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { cssTransition } from "react-toastify";
+
+// Add these components after your existing helper components
+const Highlight = ({ children }) => <span className="highlight">{children}</span>;
+const UnderlineSpan = ({ children }) => <span className="underline-accent">{children}</span>;
+
+
+// --- THEME DEFINITIONS (UPDATED WITH 10 THEMES) ---
+const themes = [
+    { name: 'Default', className: 'default', color: '#4A69BB' },
+    { name: 'Luxury', className: 'color-segment-luxury', color: '#8B5A2B' },
+    { name: 'Modern', className: 'color-segment-modern', color: '#1565C0' },
+    { name: 'Vibrant', className: 'color-segment-vibrant', color: '#7B1FA2' },
+    { name: 'Minimal', className: 'color-segment-minimal', color: '#607D8B' },
+    { name: 'Emerald Velvet', className: 'color-segment-emerald-velvet', color: '#006A4E' },
+    { name: 'Royal Burgundy', className: 'color-segment-royal-burgundy', color: '#800020' },
+    { name: 'Sapphire Night', className: 'color-segment-sapphire-night', color: '#0F52BA' },
+    { name: 'Classic Ivory', className: 'color-segment-classic-ivory', color: '#4B4B4B' },
+    { name: 'Rose Gold', className: 'color-segment-rose-gold', color: '#B76E79' }
+];
+
+// --- ThemeSwitcher Component ---
+const ThemeSwitcher = ({ activeTheme, onThemeChange }) => {
+    return (
+        <div className="color-segment-controls">
+            {themes.map(theme => (
+                <button
+                    key={theme.className}
+                    className={`color-segment-btn ${activeTheme === theme.className ? 'active' : ''}`}
+                    style={{ backgroundColor: theme.color }}
+                    onClick={() => onThemeChange(theme.className)}
+                    aria-label={`Switch to ${theme.name} theme`}
+                    title={`${theme.name} Theme`}
+                />
+            ))}
+        </div>
+    );
+};
+
+// Functional SVG components
+const FunnelIconTarget = () => <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/><circle cx="12" cy="12" r="3"/></svg>;
+const FunnelIconLightbulb = () => <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>;
+const FunnelIconAudience = () => <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>;
+const FunnelIconMic = () => <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>;
+const FunnelIconRocket = () => <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-.83 0-1.5-.67-1.5-1.5S11.17 14 12 14s1.5.67 1.5 1.5S12.83 17 12 17zm4-4H8V7h8v6z"/><path d="M4 13.01C4 11.23 4.7 9.61 5.84 8.48l-1.06-1.06C3.42 8.78 2.53 10.81 2.53 13.01S3.42 17.24 4.78 18.6l1.06-1.06C4.7 16.41 4 14.79 4 13.01zm14.16-4.53c1.14 1.13 1.84 2.75 1.84 4.53s-.7 3.4-1.84 4.53l1.06 1.06c1.36-1.36 2.25-3.39 2.25-5.59s-.89-4.23-2.25-5.59l-1.06 1.06zM12 4c-1.82 0-3.45.63-4.78 1.64l-1.06-1.06C7.54 3.23 9.66 2.5 12 2.5s4.46.73 5.84 2.08l-1.06 1.06C15.45 4.63 13.82 4 12 4z"/></svg>;
+
+const funnelStepsData = [
+    { icon: <FunnelIconTarget />, text: "Identifying the Challenge" },
+    { icon: <FunnelIconLightbulb />, text: "Ideal Branding Formula" },
+    { icon: <FunnelIconAudience />, text: "Build Audience & Assets" },
+    { icon: <FunnelIconMic />, text: "Creating a Signature Talk" },
+    { icon: <FunnelIconRocket />, text: "Scaling Your Offer & Challenge" },
+];
+
+// Helper component to safely render HTML
+const RawHTML = ({ html, as = "div", className = "" }) => {
+    const Component = as;
+    if (!html) return null;
+    return <Component className={className} dangerouslySetInnerHTML={{ __html: html.replace(/<Highlight>/g, '<span class="highlight">').replace(/<\/Highlight>/g, '</span>').replace(/<UnderlineSpan>/g, '<span class="underline-accent">').replace(/<\/UnderlineSpan>/g, '</span>') }} />;
+};
+
+const EnrollButton = ({ extraClass = "" }) => (
+    <div className={`enroll-button-container ${extraClass} animate-on-scroll fade-in`}>
+        <button className="enroll-button">
+            ENROLL NOW @ ₹99{" "}
+            <s style={{ color: "rgba(255,255,255,0.7)" }}>₹999</s>
+        </button>
+        <p className="hurry-message">
+            <span className="red-check">✔</span>{" "}
+            <span className="red-check">✔</span> Hurry! Limited Seats Available!
+        </p>
+    </div>
+);
+
+const FAQItem = ({ question, answer, isOpen, onClick, animationDelay }) => (
+    <div
+        className="faq-item animate-on-scroll fade-in-up"
+        style={{ "--animation-delay": animationDelay }}
+    >
+        <div className="faq-question" onClick={onClick}>
+            <span>{question}</span>
+            <span className={`faq-arrow ${isOpen ? 'open' : ''}`}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </span>
+        </div>
+        {isOpen && (
+            <div className="faq-answer">
+                <p>{answer}</p>
+            </div>
+        )}
+    </div>
+);
+
+const FloatingCtaBar = () => {
+    const [deadline, setDeadline] = useState('');
+    useEffect(() => {
+        const deadlineDate = new Date("2025-06-30");
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        setDeadline(deadlineDate.toLocaleDateString('en-US', options));
+    }, []);
+
+    return (
+        <div className="floating-cta-bar">
+            <div className="floating-cta-bar__container">
+                <div className="floating-cta-bar__content">
+                    <div className="floating-cta-bar__info-section">
+                        <div className="floating-cta-bar__price-details">
+                            <span className="floating-cta-bar__price-current">₹99</span>
+                            <span className="floating-cta-bar__price-original">₹999</span>
+                        </div>
+                        <div className="floating-cta-bar__deadline">Offer ends {deadline}</div>
+                    </div>
+                    <div className="floating-cta-bar__action-section">
+                        <button className="floating-cta-bar__button">ENROLL NOW</button>
+                        <div className="floating-cta-bar__bonus-text">+ Unbelievable Bonuses</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const GoogleTranslateButton = () => {
+    const [selectedLanguage, setSelectedLanguage] = useState('en');
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
+    const buttonRef = useRef(null);
+    const languages = [
+        { code: 'en', name: 'English' }, { code: 'hi', name: 'Hindi' }, { code: 'es', name: 'Spanish' },
+        { code: 'fr', name: 'French' }, { code: 'de', name: 'German' }, { code: 'ja', name: 'Japanese' },
+        { code: 'ru', name: 'Russian' }, { code: 'pt', name: 'Portuguese' }, { code: 'it', name: 'Italian' },
+        { code: 'zh-CN', name: 'Chinese' }, { code: 'ar', name: 'Arabic' }, { code: 'ko', name: 'Korean' }
+    ];
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
+                buttonRef.current && !buttonRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        const scriptId = 'google-translate-script';
+        if (document.getElementById(scriptId)) return;
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.async = true;
+        window.googleTranslateElementInit = () => {
+            new window.google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,es,fr,de,ja,ru,pt,it,zh-CN,ar,ko',
+                layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false,
+            }, 'google_translate_element');
+        };
+        document.body.appendChild(script);
+    }, []);
+
+    const changeLanguage = (languageCode) => {
+        setSelectedLanguage(languageCode);
+        setShowDropdown(false);
+        const iframe = document.querySelector('.goog-te-menu-frame');
+        if (!iframe) return;
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const langElements = iframeDoc.querySelectorAll('.goog-te-menu2-item span.text');
+        for (const element of langElements) {
+            if (element.textContent === languages.find(l => l.code === languageCode)?.name) {
+                element.click();
+                return;
+            }
+        }
+    };
+
+    return (
+        <div className="translate-container">
+            <button ref={buttonRef} className="translate-button" onClick={() => setShowDropdown(!showDropdown)}>
+                <FaGlobe className="translate-icon" /> Translate | {selectedLanguage.toUpperCase()}
+            </button>
+            {showDropdown && (
+                <div ref={dropdownRef} className="language-dropdown">
+                    {languages.map((lang) => (
+                        <div key={lang.code} className="language-option" onClick={() => changeLanguage(lang.code)}>
+                            <span>{lang.name}</span>
+                            {selectedLanguage === lang.code && <FaCheck className="language-check-icon" />}
+                        </div>
+                    ))}
+                </div>
+            )}
+            <div id="google_translate_element" style={{ display: 'none' }}></div>
+        </div>
+    );
+};
+
+// Move these functions outside the component
+// Move this function outside the component and update it:
+const getFileType = (url) => {
+    if (!url) return 'unknown';
+    
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+    
+    // Handle imported assets (they might be data URLs or webpack resolved paths)
+    if (typeof url === 'string') {
+        const lowerUrl = url.toLowerCase();
+        
+        // Check for video extensions
+        if (videoExtensions.some(ext => lowerUrl.includes(ext))) {
+            return 'video';
+        }
+        
+        // Check for image extensions
+        if (imageExtensions.some(ext => lowerUrl.includes(ext))) {
+            return 'image';
+        }
+        
+        // If it's a data URL or blob, try to determine from the MIME type
+        if (lowerUrl.startsWith('data:')) {
+            if (lowerUrl.includes('video/')) return 'video';
+            if (lowerUrl.includes('image/')) return 'image';
+        }
+        
+        // Default to image for unknown types (most backgrounds are images)
+        return 'image';
+    }
+    
+    return 'unknown';
+};
+
+function CoachingLandingPage() {
+    const funnelData = useSelector((state) => state.coachProfile);
+
+    // Handle both data sources for background
+    const heroBgFunnel2 = funnelData?.heroBgFunnel2 || 
+                         funnelData?.HeroBgFunnel2 || 
+                         funnelData?.heroBackground || 
+                         funnelData?.backgroundImage || 
+                         [];
+
+    // UI state
+    const [videoPlaying, setVideoPlaying] = useState(false);
+    const [openFAQs, setOpenFAQs] = useState({});
+    const [currentTestimonialSlide, setCurrentTestimonialSlide] = useState(0);
+    const [isDarkMode, setIsDarkMode] = useState(true);
+    const [playButtonClicked, setPlayButtonClicked] = useState(false);
+    const [activeTheme, setActiveTheme] = useState('default');
+    
+    // Refs
+    const testimonialTrackRef = useRef(null);
+    const videoRef = useRef(null);
+
+    const handleThemeChange = (themeClassName) => {
+        setActiveTheme(themeClassName);
+        localStorage.setItem('funnel-color-theme', themeClassName);
+    };
+
+    // Effect for initializing and applying themes from localStorage
+    useEffect(() => {
+        // Dark/Light Mode Logic
+        const savedDarkMode = localStorage.getItem('funnel-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const themeToSet = savedDarkMode || (prefersDark ? 'dark' : 'light');
+
+        setIsDarkMode(themeToSet === 'dark');
+        document.body.classList.toggle('funnel-dark-mode', themeToSet === 'dark');
+        document.body.classList.toggle('funnel-light-mode', themeToSet === 'light');
+
+        // Color Theme Logic
+        const savedColorTheme = localStorage.getItem('funnel-color-theme');
+        if (savedColorTheme && themes.find(t => t.className === savedColorTheme)) {
+            setActiveTheme(savedColorTheme);
+        }
+
+        return () => {
+            document.body.classList.remove('funnel-dark-mode', 'funnel-light-mode');
+        };
+    }, []);
+
+    // Effect for applying the active color theme class to the page wrapper
+    useEffect(() => {
+        const pageElement = document.querySelector('.page-wrapper');
+        if (pageElement) {
+            themes.forEach(theme => {
+                pageElement.classList.remove(theme.className);
+            });
+
+            if (activeTheme) {
+                pageElement.classList.add(activeTheme);
+            }
+        }
+    }, [activeTheme]);
+
+    if (!funnelData) {
+        return <div>Loading...</div>;
+    }
+
+    const {
+        topBarText, heroTitle, heroSubtitle, heroPills, videoPlaceholder,
+        implementationAgenda, clientShowcaseTitle, clientShowcase, socialProofTitle,
+        socialProofSubtitle, socialProofImages, handwrittenAnnotations, reverseFunnelTitle,
+        reverseFunnelSubtitle, testimonialsTitle, testimonialfunnel, tsunamiTitle, tsunamiImage,
+        tsunamiDescription, whatIfCard, comparisonTable, resultsAgendaTitle, resultdrivenagenda,
+        pricingTitle, pricingTable, currentPriceDisplay, whoIsShubh, faqTitle, testimonialfaqs,
+        footerCopyright, footerDisclaimer, date, time, location, language
+    } = funnelData;
+
+    const toggleFAQ = (index) => {
+        setOpenFAQs(prev => ({ ...prev, [index]: !prev[index] }));
+    };
+
+    const toggleTheme = () => {
+        const newIsDarkMode = !isDarkMode;
+        setIsDarkMode(newIsDarkMode);
+        const newTheme = newIsDarkMode ? 'dark' : 'light';
+        document.body.classList.toggle('funnel-dark-mode', newIsDarkMode);
+        document.body.classList.toggle('funnel-light-mode', !newIsDarkMode);
+        localStorage.setItem('funnel-theme', newTheme);
+    };
+
+    const renderHeroBackground = () => {
+        if (!heroBgFunnel2 || heroBgFunnel2.length === 0 || !heroBgFunnel2[0]?.source) {
+            return null;
+        }
+        const backgroundSource = heroBgFunnel2[0].source;
+        const fileType = getFileType(backgroundSource);
+
+        if (fileType === 'video') {
+            return (
+                <div className="hero-bg-container">
+                    <video autoPlay loop muted playsInline className="hero-background-media" onError={(e) => console.error('Video load error:', e)}>
+                        <source src={backgroundSource} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                    <div className="hero-bg-overlay"></div>
+                    <div className="hero-bg-gradient-overlay"></div>
+                </div>
+            );
+        } else if (fileType === 'image') {
+            return (
+                <div className="hero-bg-container">
+                    <img src={backgroundSource} alt="Hero Background" className="hero-background-media" onError={(e) => { e.target.style.display = 'none'; }} />
+                    <div className="hero-bg-overlay"></div>
+                    <div className="hero-bg-gradient-overlay"></div>
+                </div>
+            );
+        }
+        return null;
+    };
+
+    const handlePlayButtonClick = () => {
+        if (videoRef.current) {
+            videoRef.current.play().catch(error => {
+                console.error("Video play failed:", error);
+                if(videoRef.current) videoRef.current.controls = true;
+            });
+            setPlayButtonClicked(true);
+            setTimeout(() => setPlayButtonClicked(false), 1000);
+        }
+    };
+
+    const totalTestimonials = testimonialfunnel ? testimonialfunnel.length : 0;
+    const nextTestimonial = () => setCurrentTestimonialSlide(prev => (prev === totalTestimonials - 1 ? 0 : prev + 1));
+    const prevTestimonial = () => setCurrentTestimonialSlide(prev => (prev === 0 ? totalTestimonials - 1 : prev - 1));
+
+    useEffect(() => {
+        if (testimonialTrackRef.current && totalTestimonials > 0) {
+            const cardElement = testimonialTrackRef.current.children[0];
+            if (cardElement) {
+                const cardWidth = cardElement.clientWidth;
+                const gap = 30;
+                testimonialTrackRef.current.style.transform = `translateX(-${currentTestimonialSlide * (cardWidth + gap)}px)`;
+            }
+        }
+    }, [currentTestimonialSlide, totalTestimonials]);
+
+    useEffect(() => {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        animatedElements.forEach(el => observer.observe(el));
+        return () => animatedElements.forEach(el => observer.unobserve(el));
+    }, []);
+
+    // *** ADDED: Dynamic color for the grid background ***
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)';
+
+    return (
+        <div className="page-wrapper funnel-page">
+            <ThemeSwitcher activeTheme={activeTheme} onThemeChange={handleThemeChange} />
+
+            <div className="top-bar">
+                <span className="top-bar-text" style={{ marginLeft: '10%' }}>{topBarText}</span>
+                <div className="top-bar-controls">
+                    <button className="theme-toggle-button" onClick={toggleTheme} aria-label="Toggle theme">
+                        <img src={isDarkMode ? lightmode : darkmode} alt={isDarkMode ? "Switch to light mode" : "Switch to dark mode"} className="theme-icon" />
+                    </button>
+                    <GoogleTranslateButton />
+                </div>
+            </div>
+
+            <section className={`hero-section section-padding relative overflow-hidden ${heroBgFunnel2?.length > 0 && heroBgFunnel2[0]?.source ? 'has-dynamic-bg' : ''}`}>
+                
+                {/* *** ADDED: Grid background div from the old code *** */}
+                <div style={{
+                    position: "absolute",
+                    inset: 0,
+                    backgroundImage: `linear-gradient(to right, ${gridColor} 1px, transparent 1px), linear-gradient(to bottom, ${gridColor} 1px, transparent 1px)`,
+                    backgroundSize: "30px 30px",
+                    pointerEvents: "none",
+                    zIndex: 0,
+                }}></div>
+
+                {renderHeroBackground()}
+                
+                <div className="container hero-content">
+                    <RawHTML html={heroTitle} as="h1" className="hero-title animate-on-scroll fade-in-down" />
+                    <p className="sub-headline animate-on-scroll fade-in-up" style={{ "--animation-delay": "0.2s" } as React.CSSProperties}>
+                        {heroSubtitle}
+                    </p>
+                    <div className="hero-pills">
+                        {heroPills && heroPills.map((pill, index) => (
+                            <span key={index} className="hero-pill animate-on-scroll zoom-in" style={{ "--animation-delay": `${0.4 + index * 0.15}s` } as React.CSSProperties}>{pill}</span>
+                        ))}
+                    </div>
+                    <div className="video-agenda-container">
+                        <div className="video-section animate-on-scroll fade-in-left" style={{ "--animation-delay": "0.6s" } as React.CSSProperties}>
+                            <div className="video-placeholder-wrapper">
+                                <div className="video-placeholder">
+                                    <video
+                                        ref={videoRef}
+                                        src={videoPlaceholder?.videoblock}
+                                        playsInline
+                                        className="active-video-player"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        onPlay={() => setVideoPlaying(true)}
+                                        onPause={() => setVideoPlaying(false)}
+                                        onEnded={() => setVideoPlaying(false)}
+                                        controls={videoPlaying}
+                                    />
+                                    
+                                    {!videoPlaying && (
+                                        <>
+                                            <div
+                                                className={`play-button-overlay ${playButtonClicked ? 'clicked' : ''}`}
+                                                onClick={handlePlayButtonClick}
+                                            >
+                                                <svg className="play-icon" viewBox="0 0 100 100"><path d="M 30,20 L 30,80 L 80,50 Z" /></svg>
+                                                <div className="ripple-effect"></div>
+                                            </div>
+                                            {videoPlaceholder && (
+                                                <div className="video-placeholder-overlay-text">
+                                                    <h3>{videoPlaceholder.name}</h3>
+                                                    <p>{videoPlaceholder.tagline}</p>
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="event-details-grid">
+                                <div className="event-detail-box">
+                                    <div className="event-detail-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                            <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                                        </svg>
+                                    </div>
+                                    <div className="event-detail-label">DATE</div>
+                                    <div className="event-detail-value">{date}</div>
+                                </div>
+                                <div className="event-detail-box">
+                                    <div className="event-detail-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+                                        </svg>
+                                    </div>
+                                    <div className="event-detail-label">TIME</div>
+                                    <div className="event-detail-value">{time}</div>
+                                </div>
+                                <div className="event-detail-box">
+                                    <div className="event-detail-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                    </div>
+                                    <div className="event-detail-label">WHERE</div>
+                                    <div className="event-detail-value">{location}</div>
+                                </div>
+                                <div className="event-detail-box">
+                                    <div className="event-detail-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                        </svg>
+                                    </div>
+                                    <div className="event-detail-label">LANGUAGE</div>
+                                    <div className="event-detail-value">{language}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {implementationAgenda && <div className="implementation-agenda-wrapper animate-on-scroll fade-in-right" style={{ "--animation-delay": "0.8s" } as React.CSSProperties}>
+                            <div className="implementation-agenda">
+                                <RawHTML as="h3" html={implementationAgenda.title} />
+                                <ul style={{ display: "block", textAlign: "left" }} className="agenda-list">
+                                    {implementationAgenda.items.map((item, index) => (
+                                        <li key={index} className="agenda-list-item">
+                                            <span className="agenda-list-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+                                                </svg>
+                                            </span>
+                                            <RawHTML html={item} as="span" className="agenda-item-text" />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="agenda-enroll-section"><EnrollButton /></div>
+                        </div>}
+                    </div>
+                </div>
+            </section>
+
+            {/* The rest of the component remains unchanged */}
+
+            <section className="client-showcase-section section-padding">
+                <div className="container">
+                    <RawHTML as="h2" html={clientShowcaseTitle} className="section-title animate-on-scroll fade-in" />
+                    <div className="client-carousel-container">
+                        <div className="client-carousel">
+                            {clientShowcase && [...clientShowcase, ...clientShowcase].map((client, index) => (
+                                <div key={`${client.name}-${index}`} className="client-card">
+                                    <div className="client-image-container"><img src={client.image} alt={client.name} className="client-image" /></div>
+                                    <h3 className="client-name">{client.name}</h3><p className="client-position">{client.position}</p>
+                                    <div className="client-following"><svg className="instagram-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg><span className="following-text">Following: {client.following}</span></div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="social-proof-section section-padding">
+                <div className="container">
+                    <h2 className="section-title animate-on-scroll fade-in">
+                        In Just 3 Days... You Can Start Getting <Highlight><UnderlineSpan>Ready To Buy</UnderlineSpan></Highlight> Leads & High Ticket Sales!!
+                    </h2>
+                    <p className="section-subtitle animate-on-scroll fade-in" style={{ "--animation-delay": "0.2s" } as React.CSSProperties}>
+                        This is the ultimate black-book of <Highlight>TOP 1% coaches</Highlight> (they won't reveal it to you...)
+                    </p>
+                    <div className="screenshots-flex-container">
+                        <div className="screenshot-item animate-on-scroll fade-in-left" style={{ "--animation-delay": "0.4s" } as React.CSSProperties}>
+                            <img src={Iphoness} alt="Payment Notifications" className="simple-screenshot" />
+                        </div>
+                        <div className="phone-with-annotations animate-on-scroll fade-in-right" style={{ "--animation-delay": "0.6s" } as React.CSSProperties}>
+                            <div className="top-annotation">
+                                <p className="handwritten-text handwritten-text-top">
+                                    And when you start applying these <span className="highlight-blue-handwritten">principles</span>... your inbox could start looking <span className="highlight-green-handwritten">like this</span>.
+                                </p>
+                                <div className="arrow-container arrow-top-to-phone">
+                                    <img src={isDarkMode ? darkarrow : arrow} alt="Arrow pointing to phone" className="handwritten-arrow" />
+                                </div>
+                            </div>
+                            <div className="phone-container">
+                                <div className="screenshot-itemgg screenshot-item-gif">
+                                    <img src={Iphone} alt="More Payment Notifications in phone" style={{ boxShadow: 'none' }} className="simple-screenshot" />
+                                </div>
+                            </div>
+                            <div className="bottom-annotation">
+                                <p className="handwritten-text handwritten-text-bottom">
+                                    Hundreds of sales @ <span className="highlight-red-handwritten">High Ticket</span> Through this <span className="highlight-blue-handwritten">Reverse Funnel</span> in a span of 2 hours -
+                                </p>
+                                <div className="arrow-container arrow-bottom-to-phone">
+                                    <img src={isDarkMode ? darkarrow : arrow} alt="Arrow pointing to phone" className="handwritten-arrow" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <EnrollButton extraClass="social-proof-enroll"/>
+                </div>
+            </section>
+
+            <section className="reverse-funnel-section section-padding">
+                <div className="container">
+                    <RawHTML as="h2" html={reverseFunnelTitle} className="section-title animate-on-scroll fade-in" />
+                    <p className="section-subtitle reverse-funnel-subtitle animate-on-scroll fade-in" style={{ "--animation-delay": "0.2s" }}>{reverseFunnelSubtitle}</p>
+                    <div className="funnel-diagram">
+                        {funnelStepsData.map((step, index, arr) => (
+                            <React.Fragment key={index}>
+                                <div className={`funnel-step funnel-step-${index + 1} animate-on-scroll fade-in-up`} style={{ "--animation-delay": `${0.4 + index * 0.15}s` }}>
+                                    <div className="funnel-step-icon-wrapper">{step.icon}</div>
+                                    <div className="funnel-step-number">{String(index + 1).padStart(2, '0')}</div>
+                                    <p>{step.text}</p>
+                                </div>
+                                {index < arr.length - 1 && <div className="funnel-connector is-visible" style={{ "--animation-delay": `${0.7 + index * 0.15}s` }}></div>}
+                            </React.Fragment>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="testimonials-section section-padding">
+                <div className="container">
+                    <RawHTML as="h2" html={testimonialsTitle} className="section-title animate-on-scroll fade-in" />
+                    <div className="testimonial-slider-container">
+                        <div className="testimonial-slider-track" ref={testimonialTrackRef}>
+                            {testimonialfunnel && testimonialfunnel.map((testimonial, index) => (
+                                <div key={`${testimonial.author}-${index}`} className="testimonial-card animate-on-scroll fade-in-up" style={{ "--animation-delay": `${0.2 + index * 0.1}s` }}>
+                                    <div className="testimonial-image-wrapper"><img src={testimonial.picture} alt={`Testimonial by ${testimonial.author}`} className="testimonial-image" /></div>
+                                    <div className="testimonial-content">
+                                        <p className="testimonial-text">"{testimonial.text}"</p>
+                                        <p className="testimonial-author">- {testimonial.author} <br/><span>{testimonial.company}</span></p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    {totalTestimonials > 1 && (
+                        <div className="testimonial-slider-controls">
+                            <button onClick={prevTestimonial} className="testimonial-slider-arrow" aria-label="Previous testimonial"> <FaChevronLeft /> </button>
+                            <button onClick={nextTestimonial} className="testimonial-slider-arrow" aria-label="Next testimonial"> <FaChevronRight /> </button>
+                        </div>
+                    )}
+                    <EnrollButton extraClass="testimonial-enroll"/>
+                </div>
+            </section>
+
+            <section className="tsunami-section section-padding">
+                <div className="container">
+                    <div className="tsunami-header"><RawHTML as="h2" html={tsunamiTitle} className="section-title animate-on-scroll fade-in" /></div>
+                    <div className="tsunami-content-wrapper">
+                        <div className="tsunami-left animate-on-scroll fade-in-left" style={{ "--animation-delay": "0.2s" }}>
+                            <div className="group-photo-container"><img src={tsunamiImage} alt="Group Photo - Shubh Jain with Students" className="group-photo" /></div>
+                            <div className="tsunami-description">{tsunamiDescription && tsunamiDescription.map((p, i) => <RawHTML key={i} as="p" html={p} />)}</div>
+                        </div>
+                        <div className="tsunami-right animate-on-scroll fade-in-right" style={{ "--animation-delay": "0.4s" }}>
+                           {whatIfCard && <div className="what-if-section">
+                                <h3 className="what-if-title">{whatIfCard.title}</h3>
+                                <div className="what-if-steps">{whatIfCard.steps.map((text, i) => (<div key={i} className="what-if-step"><span className="step-number-badge">{i + 1}</span><span className="step-text">{text}</span></div>))}</div>
+                            </div>}
+                            {comparisonTable && <div className="comparison-container">
+                                <div className="comparison-table">
+                                    <div className="comparison-column old-way">
+                                        <div className="column-header"><h4>{comparisonTable.oldWay.title}</h4><p>{comparisonTable.oldWay.subtitle}</p></div>
+                                        <div className="comparison-items">{comparisonTable.oldWay.items.map((item, i) => (<div key={i} className="comparison-item"><span className="item-icon cross">✖</span><div className="item-content"><span className="item-label">Manual</span><span className="item-text">{item}</span></div></div>))}</div>
+                                    </div>
+                                    <div className="comparison-column new-way">
+                                        <div className="column-header"><h4>{comparisonTable.newWay.title}</h4><p>{comparisonTable.newWay.subtitle}</p></div>
+                                        <div className="comparison-items">{comparisonTable.newWay.items.map((item, i) => (<div key={i} className="comparison-item"><span className="item-icon check">✔</span><div className="item-content"><span className="item-label">Automated</span><span className="item-text">{item}</span></div></div>))}</div>
+                                    </div>
+                                </div>
+                            </div>}
+                        </div>
+                    </div>
+                    <EnrollButton extraClass="tsunami-enroll"/>
+                </div>
+            </section>
+
+            <section className="results-agenda-section section-padding">
+                <div className="container">
+                    <div className="results-agenda-header"><RawHTML as="h2" html={resultsAgendaTitle} className="section-title animate-on-scroll fade-in" /></div>
+                    <div className="agenda-sprint-grid">
+                        {resultdrivenagenda && resultdrivenagenda.map((item, index) => (
+                            <div key={index} className="agenda-sprint-card animate-on-scroll fade-in-up" style={{ "--animation-delay": `${0.2 + index * 0.15}s` }}>
+                                <div className="card-header"><div className="agenda-icon-wrapper"><img src={item.pic} alt={`${item.heading} Icon`} className="agenda-icon" /></div><span className="day-label">Day {String(index + 1).padStart(2, '0')}</span></div>
+                                <div className="card-content"><h3 className="agenda-card-title">{item.heading}</h3><ul className="agenda-sprint-list">{[item.point1, item.point2, item.point3, item.point4, item.point5].filter(Boolean).map((point, pIndex) => (<li key={pIndex} className="agenda-sprint-list-item"><span className="agenda-sprint-list-icon">🔹</span> {point}</li>))}</ul></div>
+                            </div>
+                        ))}
+                    </div>
+                    <EnrollButton extraClass="results-agenda-enroll"/>
+                </div>
+            </section>
+
+            <section className="pricing-section section-padding">
+                <div className="container">
+                    <RawHTML as="h2" html={pricingTitle} className="section-title animate-on-scroll fade-in" />
+                    <div className="pricing-table-wrapper animate-on-scroll zoom-in" style={{ "--animation-delay": "0.2s" }}>
+                        <div className="pricing-table">
+                            {pricingTable && pricingTable.map((row, index) => (
+                                <div key={index} className={`pricing-row ${row.isRecommended ? 'recommended' : ''}`}>
+                                    <div className="pricing-row-content">
+                                        <span className="seats">{row.badge && <span className="last-few-badge">{row.badge}</span>} {row.tier}</span>
+                                        <span className="price">{row.price}</span>
+                                        <span className="bonus">{row.bonus}</span>
+                                    </div>
+                                    {row.isRecommended && <div className="current-offer-tag">Current Offer</div>}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    {currentPriceDisplay && <div className="current-price-display animate-on-scroll fade-in" style={{ "--animation-delay": "0.4s" }}>
+                        {currentPriceDisplay.text} <span className="original-price">{currentPriceDisplay.oldPrice1}</span> <span className="original-price">{currentPriceDisplay.oldPrice2}</span> <span className="discounted-price">{currentPriceDisplay.currentPrice}</span>
+                    </div>}
+                    <EnrollButton extraClass="pricing-enroll"/>
+                </div>
+            </section>
+
+            {whoIsShubh && <div className="who-is-shubh-section-wrapper">
+                <section className="who-is-shubh-section animate-on-scroll fade-in-up" style={{ "--animation-delay": "0.2s" }}>
+                    <div className="who-is-shubh-content">
+                        <div className="shubh-photo-container"><img src={whoIsShubh.image} alt="Shubh Jain" className="shubh-photo"/></div>
+                        <div className="shubh-details">
+                            <RawHTML as="h2" html={whoIsShubh.title} className="section-title-light" />
+                            <ul className="shubh-details-list">
+                                {whoIsShubh.points.map((item, i) => (
+                                    <li key={i} className="shubh-details-list-item"><span className="shubh-details-icon"><FaCheck /></span>{item}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>}
+
+            <section className="faq-section section-padding">
+                <div className="container">
+                    <RawHTML as="h2" html={faqTitle} className="section-title animate-on-scroll fade-in" />
+                    <div className="faq-container">
+                        {testimonialfaqs && testimonialfaqs.map((faq, index) => (
+                            <FAQItem key={faq.id || index} question={faq.question} answer={faq.answer} isOpen={!!openFAQs[index]} onClick={() => toggleFAQ(index)} animationDelay={`${0.2 + index * 0.1}s`} />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <footer className="footer">
+                <div className="container">
+                    <div className="footer-copyright"><p>{footerCopyright}</p></div>
+                    <RawHTML as="div" html={footerDisclaimer} className="footer-disclaimer" />
+                </div>
+            </footer>
+            <FloatingCtaBar />
+        </div>
+    );
+}
+
+export default CoachingLandingPage;
